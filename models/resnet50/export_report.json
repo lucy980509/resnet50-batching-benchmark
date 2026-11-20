@@ -1,0 +1,124 @@
+{
+  "status": "PASSED",
+  "created": "2026-11-01T16:47:33",
+  "weights": "torchvision ResNet50_Weights.IMAGENET1K_V2",
+  "weights_meta": {
+    "acc@1": 80.858,
+    "acc@5": 95.434,
+    "url": "https://download.pytorch.org/models/resnet50-11ad3fa6.pth"
+  },
+  "preprocessing": {
+    "resize_size": 232,
+    "crop_size": 224,
+    "interpolation": "InterpolationMode.BILINEAR",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "color_order": "RGB",
+    "layout": "NCHW",
+    "scale": "uint8 [0,255] -> float [0,1] before normalization"
+  },
+  "precision": "FP32",
+  "export": {
+    "exporter": "torch.onnx.export(dynamo=True)",
+    "opset": 18,
+    "input": {
+      "name": "input",
+      "shape": [
+        "batch",
+        3,
+        224,
+        224
+      ]
+    },
+    "output": {
+      "name": "logits",
+      "shape": [
+        "batch",
+        1000
+      ]
+    },
+    "dynamic_batch_range": [
+      1,
+      64
+    ],
+    "onnx_input_dim0": "batch",
+    "onnx_output_dim0": "batch",
+    "batch_axis_dynamic": true,
+    "external_data_used": true,
+    "onnx_file": "resnet50_v2_fp32.onnx",
+    "onnx_size_bytes": 248847,
+    "onnx_sha256": "cb19637ed9827e5d7adbf6466df88b69d693b40dff11a7ee523a4a0d5de6b6d7",
+    "weights_data_file": "resnet50_v2_fp32.onnx.data",
+    "weights_data_size_bytes": 102120096,
+    "weights_data_sha256": "73ac483ab5c46351b093291d14184e30eb9a046d3ade56f3c17f9874309972c6"
+  },
+  "verification": {
+    "kind": "synthetic random FP32 input (seeded); conversion check only, NOT ImageNet data and NOT a model accuracy metric",
+    "seed": 1,
+    "runtime_compared": "PyTorch CPU vs ONNX Runtime CPUExecutionProvider",
+    "tolerance": {
+      "rtol": 0.001,
+      "atol": 0.0001
+    },
+    "checks": [
+      {
+        "batch_size": 1,
+        "output_shape": [
+          1,
+          1000
+        ],
+        "output_shape_ok": true,
+        "finite_ok": true,
+        "max_abs_diff": 2.384185791015625e-06,
+        "allclose_rtol_1e-3_atol_1e-4": true,
+        "top1_match": true,
+        "pytorch_top1": [
+          21
+        ],
+        "onnx_top1": [
+          21
+        ]
+      },
+      {
+        "batch_size": 4,
+        "output_shape": [
+          4,
+          1000
+        ],
+        "output_shape_ok": true,
+        "finite_ok": true,
+        "max_abs_diff": 2.7418136596679688e-06,
+        "allclose_rtol_1e-3_atol_1e-4": true,
+        "top1_match": true,
+        "pytorch_top1": [
+          21,
+          21,
+          21,
+          21
+        ],
+        "onnx_top1": [
+          21,
+          21,
+          21,
+          21
+        ]
+      }
+    ]
+  },
+  "packages": {
+    "python": "3.12.10",
+    "torch": "2.15.0+cpu",
+    "torchvision": "0.29.2+cpu",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.26.0",
+    "numpy": "2.5.4"
+  }
+}
