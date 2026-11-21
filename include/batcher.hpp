@@ -8,7 +8,7 @@
 
 class RequestQueue;
 
-inline const std::size_t max_batch_size = 16;
+inline const std::size_t max_batch_size = 1;
 inline const auto slo = std::chrono::milliseconds(100);
 
 enum class Policy { Static, Dynamic, Adaptive };

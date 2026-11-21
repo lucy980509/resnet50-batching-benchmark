@@ -10,8 +10,13 @@
 
 using namespace std::chrono_literals;
 
-RunResult benchmark(InferenceEngine& engine, Policy policy, const Workload& workload,
-                    std::size_t request_count, double estimated_inference_ms) {
+RunResult benchmark(
+    InferenceEngine& engine,
+    Policy policy,
+    const Workload& workload,
+    std::size_t request_count,
+    double estimated_inference_ms,
+    const std::vector<std::vector<float>>& images) {
     RequestQueue queue;
     RunResult result;
     result.latencies_ms.reserve(request_count);
@@ -40,7 +45,7 @@ RunResult benchmark(InferenceEngine& engine, Policy policy, const Workload& work
             }
 
             const auto inference_start = Clock::now();
-            engine.run(batch.size);
+            engine.run(batch, images);
             last_finished = Clock::now();
             result.batches.push_back({batch.size, milliseconds(last_finished - inference_start)});
 

@@ -23,6 +23,7 @@ add_executable(p3_inference
     src/batcher.cpp
     src/inference_engine.cpp
     src/metrics.cpp
+    src/dataset.cpp
 )
 
 target_include_directories(p3_inference PRIVATE

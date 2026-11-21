@@ -5,12 +5,14 @@
 #include <vector>
 
 #include <onnxruntime_cxx_api.h>
+#include "batcher.hpp"
 
 class InferenceEngine {
 public:
     InferenceEngine(const std::filesystem::path& model_path, std::size_t max_batch_size);
 
     void run(std::size_t batch_size);
+    void run(const Batch& batch, const std::vector<std::vector<float>>& images);
     double warm_up();
 
 private:

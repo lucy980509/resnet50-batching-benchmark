@@ -56,3 +56,21 @@ double InferenceEngine::warm_up() {
     }
     return estimated_inference_ms;
 }
+
+void InferenceEngine::run(
+    const Batch& batch,
+    const std::vector<std::vector<float>>& images
+) {
+    for (std::size_t i = 0; i < batch.size; ++i) {
+        const auto image_index = batch.requests[i].image_index;
+        const auto& image = images.at(image_index);
+
+        std::copy(
+            image.begin(),
+            image.end(),
+            input_.begin() + i * image_elements
+        );
+    }
+
+    run(batch.size);
+}

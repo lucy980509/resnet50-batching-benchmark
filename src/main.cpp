@@ -8,13 +8,24 @@
 #include "benchmark.hpp"
 #include "inference_engine.hpp"
 #include "metrics.hpp"
+#include "dataset.hpp"
 
 int main() {
     try {
         const std::filesystem::path model_path =
             "models/resnet50/resnet50_v2_fp32.onnx";
-        const int request_count = 200;
+        const int request_count = 1000;
         const int repetitions = 3;
+
+        const auto images = read_prepared_images(
+            kPreparedImagePath,
+            kPreparedImageCount,
+            3 * 224 * 224,
+            0,
+            request_count
+        );
+
+        std::cout << "Loaded images: " << images.size() << '\n';
 
         InferenceEngine engine(model_path, max_batch_size);
 
@@ -49,7 +60,8 @@ int main() {
                         policy.policy,
                         workload,
                         request_count,
-                        estimate
+                        estimate,
+                        images
                     );
 
                     write_results(

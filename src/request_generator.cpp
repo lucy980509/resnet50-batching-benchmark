@@ -22,6 +22,7 @@ void generate_requests(RequestQueue& queue, const Workload& workload,
         const auto woke_at = Clock::now();
         Request request{arrival};
         request.woke_at = woke_at;
+        request.image_index = i;
         if (!queue.push(request)) {
             break;
         }
