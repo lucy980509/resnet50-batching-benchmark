@@ -17,7 +17,7 @@ This is a reimplementation and extension of my [earlier P3 project](https://gith
 
 All reported aggregate values are means of three per-run metrics.
 
-![P95 across workloads and batch capacities](assets/figures/p95_workload_heatmap.png)
+![P95 across workloads and batch capacities](assets/p95_workload_heatmap.png)
 
 *Mean per-run P95 in milliseconds. Lower is better; the color scale is logarithmic.*
 
@@ -52,13 +52,13 @@ The application uses one producer thread, one batch-collection/inference thread,
 
 ```mermaid
 flowchart TD
-    A[Prepared images in RAM] --> E[Batch input assembly]
-    B[Scheduled request producer] --> C[Thread-safe FIFO queue]
-    C --> D[Policy-based batch collector]
+    A["Images in RAM"] --> E["Input buffer"]
+    B["Producer"] --> C["Request queue"]
+    C --> D["Batcher"]
     D --> E
-    E --> F[ONNX Runtime CUDA inference]
-    F --> G[Request and batch metrics]
-    G --> H[CSV reports]
+    E --> F["GPU inference"]
+    F --> G["Metrics"]
+    G --> H["CSV reports"]
 ```
 
 The queue uses `std::mutex` and `std::condition_variable`, supporting blocking, deadline-based, and nonblocking dequeue operations.
@@ -197,7 +197,7 @@ Raw measurements are available in [results/](results/). Tables report arithmetic
 
 ### High-load capacity sweep
 
-![High-load throughput, P95, and target attainment](assets/figures/high_load_scaling.png)
+![High-load throughput, P95, and target attainment](assets/high_load_scaling.png)
 
 *Points are three-run means. Bands indicate observed minimum–maximum values, not confidence intervals. P95 uses a logarithmic axis.*
 
@@ -234,7 +234,7 @@ At capacity 1, all policies execute without additional collection, so their beha
 
 ### Where latency accumulates
 
-![Mean latency components at capacity 16](assets/figures/latency_breakdown_b16.png)
+![Mean latency components at capacity 16](assets/latency_breakdown_b16.png)
 
 *Bars show request-weighted means across 3,000 requests per workload/policy. This is a mean decomposition, not a P95 decomposition.*
 
